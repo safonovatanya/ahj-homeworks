@@ -3,10 +3,8 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -27,19 +25,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [
+          MiniCssExtractPlugin.loader, 'css-loader',
+        ],
       },
       {
-        test: /\.(png|jpg|gif|ico)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              esModule: false,
-              name: '[name].[ext]',
-            },
+        test: /\.(png|jpg|gif)$/i,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 8192,
+            esModule: false,
           },
-        ],
+        }],
       },
     ],
   },
@@ -47,11 +45,11 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: './src/index.html',
       filename: './index.html',
-      favicon: './src/favicon.ico',
+      favicon: 'src/favicon.ico',
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css',
     }),
   ],
-};
+}
